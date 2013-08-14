@@ -71,7 +71,7 @@ class Configuration implements ConfigurationInterface
                     ->children()
                         ->scalarNode('notification_route')->isRequired()->cannotBeEmpty()->end()
                         ->scalarNode('internal_back_to_shop_route')->isRequired()->cannotBeEmpty()->end()
-                        ->scalarNode('external_back_to_shop_rout')->isRequired()->cannotBeEmpty()->end()
+                        ->scalarNode('external_back_to_shop_route')->isRequired()->cannotBeEmpty()->end()
                     ->end()
                 ->end()
             ->end();
