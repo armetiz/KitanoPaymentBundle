@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Templating\EngineInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 class FreePaymentSystem
     implements SimpleCreditCardInterface
@@ -29,25 +30,30 @@ class FreePaymentSystem
     protected $templating;
 
     /** @var null| string */
-    protected $internalBackToShopUrl = null;
+    protected $internalBackToShopRoute = null;
 
     /** @var null| string */
-    protected $externalBackToShopUrl = null;
+    protected $externalBackToShopRoute = null;
+
+    /** @var null| Router */
+    protected $router = null;
 
     public function __construct(
         TransactionRepositoryInterface $transactionRepository,
         LoggerInterface $logger,
         EngineInterface $templating,
-        $internalBackToShopUrl,
-        $externalBackToShopUrl
+        $internalBackToShopRoute,
+        $externalBackToShopRoute,
+        RouterInterface $router
     )
     {
         $this->transactionRepository = $transactionRepository;
         $this->logger = $logger;
         $this->templating = $templating;
 
-        $this->internalBackToShopUrl = $internalBackToShopUrl;
-        $this->externalBackToShopUrl = $externalBackToShopUrl;
+        $this->internalBackToShopRoute = $internalBackToShopRoute;
+        $this->externalBackToShopRoute = $externalBackToShopRoute;
+        $this->router = $router;
     }
 
     /**
@@ -59,8 +65,8 @@ class FreePaymentSystem
             'orderId' => $transaction->getOrderId(),
             'transactionId' => $transaction->getId(),
             'transactionType' => 'free',
-            'internalBackToShop' => $this->internalBackToShopUrl,
-            'externalBackToShop' => $this->externalBackToShopUrl
+            'internalBackToShopRoute' => $this->internalBackToShopRoute,
+            'externalBackToShopRoute' => $this->externalBackToShopRoute
         ));
     }
 
@@ -89,7 +95,14 @@ class FreePaymentSystem
         $transaction->setExtraData($requestData->all());
         $this->transactionRepository->save($transaction);
 
-        $response = new RedirectResponse($this->externalBackToShopUrl.'?transactionId='.$transaction->getId().'&orderId='.$transaction->getOrderId(), "302");
+        return $this->container->get('router')->generate($route, $parameters, $referenceType);
+        
+        $externalBackToShopUrl = $this->router->generate($this->externalBackToShopRoute, array(
+            'transactionId' => $transaction->getId(),
+            'orderId' => $transaction->getOrderId()
+        ));
+        
+        $response = new RedirectResponse($externalBackToShopUrl, "302");
         return new HandlePaymentResponse($transaction, $response);
     }
 
