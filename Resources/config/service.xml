@@ -25,8 +25,8 @@
             <argument type="service" id="kitano_payment.repository.transaction" />
             <argument type="service" id="logger" />
             <argument type="service" id="templating" />
-            <argument>%kitano_payment.config.internal_back_to_shop_url%</argument>
-            <argument>%kitano_payment.config.external_back_to_shop_url%</argument>
+            <argument>%kitano_payment.config.internal_back_to_shop_route%</argument>
+            <argument>%kitano_payment.config.external_back_to_shop_route%</argument>
         </service>
 
     </services>

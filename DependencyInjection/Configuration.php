@@ -56,9 +56,9 @@ class Configuration implements ConfigurationInterface
      * Example for yaml driver:
      * kitano_payment:
      *     config:
-     *         notification_url: "http://www.example.com/payment/payment-notification"
-     *         internal_back_to_shop_url: "https://www.example.com/payment/back-to-shop"
-     *         external_back_to_shop_url: "http://www.example.com/shop/back-to-shop"
+     *         notification_route: "payment_notification"
+     *         internal_back_to_shop_route: "payment_back_to_shop"
+     *         external_back_to_shop_route: "shop_back_to_shop"
      *
      * @param ArrayNodeDefinition $node
      * @return void
@@ -69,9 +69,9 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->arrayNode('config')
                     ->children()
-                        ->scalarNode('notification_url')->isRequired()->cannotBeEmpty()->end()
-                        ->scalarNode('internal_back_to_shop_url')->isRequired()->cannotBeEmpty()->end()
-                        ->scalarNode('external_back_to_shop_url')->isRequired()->cannotBeEmpty()->end()
+                        ->scalarNode('notification_route')->isRequired()->cannotBeEmpty()->end()
+                        ->scalarNode('internal_back_to_shop_route')->isRequired()->cannotBeEmpty()->end()
+                        ->scalarNode('external_back_to_shop_rout')->isRequired()->cannotBeEmpty()->end()
                     ->end()
                 ->end()
             ->end();
