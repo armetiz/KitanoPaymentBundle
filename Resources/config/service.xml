@@ -27,6 +27,7 @@
             <argument type="service" id="templating" />
             <argument>%kitano_payment.config.internal_back_to_shop_route%</argument>
             <argument>%kitano_payment.config.external_back_to_shop_route%</argument>
+            <argument type="service" id="router" />
         </service>
 
     </services>
